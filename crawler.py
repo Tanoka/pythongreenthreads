@@ -28,9 +28,10 @@ got body from http://us.i1.yimg.com/us.yimg.com/i/ww/beta/y3.gif of length 1874
 """ 
 import eventlet 
 from eventlet.green.urllib import request 
- 
- 
+
+import time 
 urls = [ 
+    "http://www.byhours.com",
     "https://www.google.com/intl/en_ALL/images/logo.gif", 
     "http://python.org/images/python-logo.gif", 
     "http://us.i1.yimg.com/us.yimg.com/i/ww/beta/y3.gif", 
@@ -38,29 +39,22 @@ urls = [
  
  
 def fetch(url): 
+    stt = time.time()
     print("opening", url) 
     body = request.urlopen(url).read() 
     print("done with", url) 
+    print('-----> Time func:', time.time() - stt, 'sec')   
     return url, body 
  
  
 #Pool of green threads, size=200
 pool = eventlet.GreenPool(200) 
 
+st = time.time()
+
 #iterator.imap each iteration is executed in a separate green thread
 # .imap(function name, params)
 for url, body in pool.imap(fetch, urls): 
     print("got body from", url, "of length", len(body))
-~                                                                                                                                                                                                
-~                                                                                                                                                                                                
-~                                                                                                                                                                                                
-~                                                                                                                                                                                                
-~                                                                                                                                                                                                
-~                                                                                                                                                                                                
-~                                                                                                                                                                                                
-~                                                                                                                                                                                                
-~                                                                                                                                                                                                
-~                                                                                                                                                                                                
-~                                                                                                                                                                                                
--- VISUAL --                                                                                                                                                         30        1,1           All
 
+print('\nTime End:', time.time() - st, 'sec')   
